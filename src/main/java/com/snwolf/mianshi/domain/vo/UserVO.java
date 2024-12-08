@@ -1,10 +1,11 @@
 package com.snwolf.mianshi.domain.vo;
 
+import com.snwolf.mianshi.domain.entity.User;
 import lombok.Data;
+import org.springframework.beans.BeanUtils;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 
 /**
  * 用户视图
@@ -46,4 +47,10 @@ public class UserVO implements Serializable {
      * 创建时间
      */
     private Date createTime;
+
+    public static UserVO objToVO(User user){
+        UserVO userVO = new UserVO();
+        BeanUtils.copyProperties(user, userVO);
+        return userVO;
+    }
 }

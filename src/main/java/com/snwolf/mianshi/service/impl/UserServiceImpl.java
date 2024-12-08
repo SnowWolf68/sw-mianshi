@@ -9,6 +9,7 @@ import com.snwolf.mianshi.domain.dto.user.UserDTO;
 import com.snwolf.mianshi.domain.dto.user.UserLoginDTO;
 import com.snwolf.mianshi.domain.dto.user.UserRegisterDTO;
 import com.snwolf.mianshi.domain.entity.User;
+import com.snwolf.mianshi.domain.vo.UserVO;
 import com.snwolf.mianshi.exception.AccountAlreadyExistException;
 import com.snwolf.mianshi.exception.AccountOrPasswordException;
 import com.snwolf.mianshi.exception.CheckPasswordException;
@@ -66,5 +67,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         stringRedisTemplate.opsForHash().putAll(RedisConstants.USER_LOGIN_KEY + token, userMap);
         stringRedisTemplate.expire(RedisConstants.USER_LOGIN_KEY + token, RedisConstants.USER_LOGIN_TTL, TimeUnit.MINUTES);
         return token;
+    }
+
+    @Override
+    public UserVO getUserVO(Long userId) {
+        User user = getById(userId);
+        return UserVO.objToVO(user);
     }
 }

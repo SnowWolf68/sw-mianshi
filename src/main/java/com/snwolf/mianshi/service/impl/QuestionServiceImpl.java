@@ -9,13 +9,18 @@ import com.snwolf.mianshi.domain.dto.question.QuestionAddRequest;
 import com.snwolf.mianshi.domain.dto.question.QuestionQueryRequest;
 import com.snwolf.mianshi.domain.dto.user.UserDTO;
 import com.snwolf.mianshi.domain.entity.Question;
+import com.snwolf.mianshi.domain.entity.User;
 import com.snwolf.mianshi.domain.vo.QuestionVO;
+import com.snwolf.mianshi.domain.vo.UserVO;
 import com.snwolf.mianshi.mapper.QuestionMapper;
 import com.snwolf.mianshi.result.Result;
 import com.snwolf.mianshi.service.QuestionService;
+import com.snwolf.mianshi.service.UserService;
 import com.snwolf.mianshi.utils.UserHolder;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
 
 /**
 * @author zhang
@@ -25,6 +30,9 @@ import org.springframework.stereotype.Service;
 @Service
 public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question>
     implements QuestionService {
+
+    @Resource
+    private UserService userService;
 
     @Override
     public Result<Long> addQuestion(QuestionAddRequest questionAddRequest) {
@@ -40,8 +48,11 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question>
     @Override
     public QuestionVO getQuestionVO(Long questionId) {
         Question question = getById(questionId);
-        QuestionVO questionVO = new QuestionVO();
-        BeanUtils.copyProperties(question, questionVO);
+        QuestionVO questionVO = QuestionVO.objToVo(question);
+        UserDTO userDTO = UserHolder.getUser();
+        questionVO.setUserId(userDTO.getId());
+        UserVO userVO = userService.getUserVO(questionVO.getUserId());
+        questionVO.setUser(userVO);
         return questionVO;
     }
 

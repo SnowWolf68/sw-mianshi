@@ -4,7 +4,10 @@ import com.baomidou.mybatisplus.annotation.*;
 
 import java.io.Serializable;
 import java.util.Date;
+
+import com.snwolf.mianshi.domain.vo.UserVO;
 import lombok.Data;
+import org.springframework.beans.BeanUtils;
 
 /**
  * 用户

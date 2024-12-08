@@ -1,6 +1,9 @@
 package com.snwolf.mianshi.domain.vo;
 
+import cn.hutool.json.JSONUtil;
+import com.snwolf.mianshi.domain.entity.Question;
 import lombok.Data;
+import org.springframework.beans.BeanUtils;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -38,19 +41,9 @@ public class QuestionVO implements Serializable {
     private Long userId;
 
     /**
-     * 标签列表（json 数组）
-     */
-    private List<String> tags;
-
-    /**
      * 推荐答案
      */
     private String answer;
-
-    /**
-     * 创建用户信息
-     */
-    private UserVO createUser;
 
     /**
      * 创建时间
@@ -71,4 +64,16 @@ public class QuestionVO implements Serializable {
      * 创建用户信息
      */
     private UserVO user;
+
+    /**
+     * 对象转封装类
+     * @param question
+     * @return
+     */
+    public static QuestionVO objToVo(Question question) {
+        QuestionVO questionVO = new QuestionVO();
+        BeanUtils.copyProperties(question, questionVO);
+        questionVO.setTagList(JSONUtil.toList(question.getTags(), String.class));
+        return questionVO;
+    }
 }
